@@ -10,7 +10,7 @@ output:
 ## Introduction:
 For this project, I am wondering whether the different in people's income would influence the death cases by Covid-19in the US. For the first dateset, I choose to use Median Income for each state in the US provided by United State Census and the link is 'https://www.census.gov/search-results.html?q=Median+income+&page=1&stateGeo=none&searchtype=web&cssp=SERP&_charset_=UTF-8'. For the second dateset, I choose to use the collection of Covid-19 cases and all-causes death cases in each state and county in the US provided by the CDC and the link is 'https://data.cdc.gov/NCHS/Provisional-COVID-19-Death-Counts-in-the-United-St/kn79-hsxy' 
 
-```{r setup, include=FALSE}
+```{r setup, echo=FALSE, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(leaflet)
 library(data.table)
@@ -31,7 +31,7 @@ library(DT)
 library(knitr)
 ```
 
-```{r}
+```{r echo=FALSE}
 # INITALIZE CODE CHUNK OPTIONS
 opts_chunk$set(
   warning = FALSE,
@@ -54,13 +54,13 @@ I need to merge those two datasets by the variable 'State' to get a full dataset
 
 
 ## 2. Read in the data
-```{r Import the data}
+```{r Import the data, echo=FALSE}
 income <- data.table::fread("/Users/websterj/Desktop/median income.csv")
 covid <- data.table::fread("/Users/websterj/Desktop/Covid.csv")
 ```
 
 Merge two dataset
-```{r}
+```{r,echo=FALSE}
 covid1 <- merge(
   x = income,
   y = covid,
@@ -72,7 +72,7 @@ covid1<-data.table(covid1)
 
 ```
 ## 3. Check the data
-```{r}
+```{r,echo=FALSE, include=FALSE}
 #check the dimension of the dataset
 dim(covid1)
 nrow(covid1)
@@ -131,7 +131,7 @@ covid1$`All_causes_death`[is.na(covid1$`All_causes_death`)] <- 0
 We checked the dimension of our data and noticed that there are 3023 total observations and 14 different factors for each of our observation. Then, I did some summaries for the key variables such as Income, Covid-19 death cases and all caused death cases. I found the the lowest median income for people living in certain state is $45081 and highest median income for people living in certain state is $86420. Also, I noticed that the lowest death cases caused by COVID-19 is in Colorado which equals to 0 and highest death cases caused by COVID-19 in California which equals to 73920 and mean death cases caused by COVID-19 in the US is 20504 for any state. From the data visualization, The first plot shows that California, Florida, New York and Texas contains much more COVID-19 death than other states. For the second plot, we noticed that the range of Income between each state is relatively large which equals to 41339, Mississippi with the lowest median income which equals to 45081 and District of Columbia with the highest median income which equals to 86420. The third graph is about the association between different urban-rural classification and COVID-19 death cases. We found that there is a relative positive linear association, as the counties contains more population, the more COVID-19 death cases occurs. The last graph is the scatter plot for the association between Income and COVID-19 death. However, the pattern is not clear and looks like a normal distribution. 
 
 ## 4. Summary statistics in tabular form
-```{r}
+```{r,echo=FALSE}
 tab <- covid1[, .(
   Number_of_County =length(unique(county_name)),
   Income=unique(Income),
@@ -144,7 +144,7 @@ datatable(tab)
 ```
 
 ## 5. Data visualization
-```{r plots}
+```{r plots,echo=FALSE}
 # Using Usmap to show the number of Covid_19 death cases in each state.
 covid1<-as.data.table(covid1 %>% 
   group_by(State) %>% 
